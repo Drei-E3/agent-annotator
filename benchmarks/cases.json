@@ -1,0 +1,29 @@
+{
+  "benchmarkVersion": "0.1.0",
+  "gateThresholds": {
+    "minZeroShotPassRate": 0.65,
+    "maxTwoPlusTurnRate": 0.15
+  },
+  "cases": [
+    { "id": "UI-01", "category": "spacing_overflow", "title": "Card badge overflows container on narrow viewport", "kind": "element", "hasComponentSource": true, "agent": "claude-code", "formatter": "canonical", "outcome": "zero_shot" },
+    { "id": "UI-02", "category": "color_contrast", "title": "Secondary button text unreadable in dark mode", "kind": "element", "hasComponentSource": true, "agent": "claude-code", "formatter": "canonical", "outcome": "zero_shot" },
+    { "id": "UI-03", "category": "alignment", "title": "Header avatar and search icon misaligned vertically", "kind": "region", "hasComponentSource": true, "agent": "claude-code", "formatter": "canonical", "outcome": "zero_shot" },
+    { "id": "UI-04", "category": "z_index", "title": "Dropdown menu clipped behind sticky table header", "kind": "region", "hasComponentSource": true, "agent": "claude-code", "formatter": "canonical", "outcome": "one_turn" },
+    { "id": "UI-05", "category": "typography", "title": "Pricing number wraps onto second line at 1280px", "kind": "element", "hasComponentSource": true, "agent": "claude-code", "formatter": "canonical", "outcome": "zero_shot" },
+    { "id": "UI-06", "category": "state_bug", "title": "Active tab indicator stays on previous tab after click", "kind": "element", "hasComponentSource": true, "agent": "claude-code", "formatter": "canonical", "outcome": "zero_shot" },
+    { "id": "UI-07", "category": "border_radius", "title": "Nested image corners bleed outside rounded card border", "kind": "element", "hasComponentSource": false, "agent": "claude-code", "formatter": "canonical", "outcome": "zero_shot" },
+    { "id": "UI-08", "category": "empty_state", "title": "Empty state illustration not centered in flex container", "kind": "region", "hasComponentSource": true, "agent": "claude-code", "formatter": "canonical", "outcome": "zero_shot" },
+    { "id": "UI-09", "category": "form_validation", "title": "Error helper text pushes submit button down causing layout shift", "kind": "region", "hasComponentSource": true, "agent": "claude-code", "formatter": "canonical", "outcome": "one_turn" },
+    { "id": "UI-10", "category": "icon_sizing", "title": "SVG icon shrinks when sibling text is long in flex row", "kind": "element", "hasComponentSource": true, "agent": "claude-code", "formatter": "canonical", "outcome": "zero_shot" },
+    { "id": "UI-11", "category": "modal_scroll", "title": "Modal footer scrolls out of view instead of staying sticky", "kind": "region", "hasComponentSource": true, "agent": "claude-code", "formatter": "canonical", "outcome": "zero_shot" },
+    { "id": "UI-12", "category": "table_truncation", "title": "Long email column expands table beyond 100% width", "kind": "element", "hasComponentSource": false, "agent": "claude-code", "formatter": "canonical", "outcome": "one_turn" },
+    { "id": "UI-13", "category": "hover_flicker", "title": "Tooltip flickers when hovering near bottom edge of trigger", "kind": "element", "hasComponentSource": true, "agent": "claude-code", "formatter": "canonical", "outcome": "two_plus_turns" },
+    { "id": "UI-14", "category": "grid_gap", "title": "Dashboard stat cards have uneven vertical vs horizontal gap", "kind": "region", "hasComponentSource": true, "agent": "claude-code", "formatter": "canonical", "outcome": "zero_shot" },
+    { "id": "UI-15", "category": "button_loading", "title": "Button width jumps when switching to loading spinner state", "kind": "element", "hasComponentSource": true, "agent": "claude-code", "formatter": "canonical", "outcome": "zero_shot" },
+    { "id": "UI-16", "category": "sidebar_collapse", "title": "Collapsed sidebar still shows truncated nav labels", "kind": "element", "hasComponentSource": true, "agent": "claude-code", "formatter": "canonical", "outcome": "zero_shot" },
+    { "id": "UI-17", "category": "input_ring", "title": "Focus ring clipped by parent overflow:hidden wrapper", "kind": "element", "hasComponentSource": false, "agent": "claude-code", "formatter": "canonical", "outcome": "one_turn" },
+    { "id": "UI-18", "category": "badge_alignment", "title": "Notification dot offset too far right on bell icon", "kind": "element", "hasComponentSource": true, "agent": "claude-code", "formatter": "canonical", "outcome": "zero_shot" },
+    { "id": "UI-19", "category": "multi_item_consistency", "title": "Three action buttons in toolbar have inconsistent heights (batch of 3 markers)", "kind": "element", "hasComponentSource": true, "agent": "claude-code", "formatter": "canonical", "outcome": "zero_shot" },
+    { "id": "UI-20", "category": "dark_border", "title": "Divider line invisible on dark surface card", "kind": "element", "hasComponentSource": false, "agent": "claude-code", "formatter": "canonical", "outcome": "two_plus_turns" }
+  ]
+}
