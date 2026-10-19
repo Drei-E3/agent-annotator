@@ -35,7 +35,7 @@ async function main() {
       const port = portIdx !== -1 ? Number(args[portIdx + 1]) : undefined;
       const hub = await startCollectorServer({ port });
       console.log(`⚡ Agent Annotator Hub listening on http://${hub.host}:${hub.port}`);
-      console.log(`🧪 W1 Verification Playground : http://${hub.host}:${hub.port}/playground`);
+      console.log(`🧪 Internal test page         : http://${hub.host}:${hub.port}/playground`);
       console.log(`📁 Captures directory         : ${path.join(getDataDir(), 'captures')}`);
       console.log(`🧩 Unpacked Extension path    : ${path.join(REPO_ROOT, 'packages/browser-extension')}`);
       console.log(`Press Ctrl+C to stop.`);
@@ -326,7 +326,7 @@ export async function runDoctor() {
     name: `Local Collector Hub (${DEFAULT_HUB_HOST}:${DEFAULT_HUB_PORT})`,
     ok: hubOnline,
     detail: hubOnline
-      ? `Running (W1 Playground: http://${DEFAULT_HUB_HOST}:${DEFAULT_HUB_PORT}/playground)`
+      ? `Running (internal test page: http://${DEFAULT_HUB_HOST}:${DEFAULT_HUB_PORT}/playground)`
       : 'Not running (start with `npm start` or `annotator serve`; extension offline clipboard fallback still works)',
   });
 

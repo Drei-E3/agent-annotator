@@ -12,7 +12,7 @@ Universal, on-demand UI annotation collector for AI coding agents (**Claude Code
 
 ## Local Hub, Background Service & MCP Server
 
-Start the Local Collector Hub (saves cropped PNGs to `~/.agent-annotator/captures/`, serves the W1 Playground at `http://127.0.0.1:17380/playground`, and writes local file paths to your clipboard):
+Start the Local Collector Hub (saves cropped PNGs to `~/.agent-annotator/captures/`, serves an internal test page at `http://127.0.0.1:17380/playground`, and writes local file paths to your clipboard):
 
 ```bash
 npm start
