@@ -2,6 +2,7 @@
   "name": "agent-annotator",
   "version": "0.1.0",
   "description": "Universal browser & desktop annotation collector for AI coding agents (Claude Code, Cursor, Codex, Antigravity)",
+  "license": "Apache-2.0",
   "type": "module",
   "private": true,
   "bin": {

@@ -52,3 +52,7 @@ npm run benchmark
 - Build the store upload: `npm run pack-release` → `dist/agent-annotator-extension-v<version>.zip`
 - Listing text, permission justifications and privacy answers: [docs/CHROME_WEB_STORE.md](./docs/CHROME_WEB_STORE.md)
 - Privacy policy: [docs/PRIVACY.md](./docs/PRIVACY.md)
+
+## License
+
+[Apache License 2.0](./LICENSE)
