@@ -273,7 +273,7 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
     <header class="hero">
       <div>
         <h1>
-          🎯 Universal Agent Annotator
+          Universal Agent Annotator
           <span class="badge">W1 Real-Browser Verification Playground</span>
         </h1>
         <p>
@@ -281,8 +281,8 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
         </p>
       </div>
       <div class="btn-row">
-        <button id="btn-run-selftest" class="btn primary">⚡ Run DPR &amp; Single-Capture Multi-Crop Self-Test</button>
-        <button id="btn-refresh" class="btn">🔄 Refresh Inspector</button>
+        <button id="btn-run-selftest" class="btn primary">Run DPR &amp; Single-Capture Multi-Crop Self-Test</button>
+        <button id="btn-refresh" class="btn">Refresh Inspector</button>
       </div>
     </header>
 
@@ -325,7 +325,7 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
           <span class="code-tag" id="dpr-indicator">DPR: detecting...</span>
         </h2>
         <p style="margin:0;font-size:12px;color:var(--muted);">
-          Use Region Drag (<code>📐 Region</code> or hold <code>Option/Alt</code>) across this 1px reticle or the 4 screen corners to verify zero black borders &amp; zero pixel shift.
+          Use Region Drag (<code>Drag region</code> or hold <code>Option/Alt</code>) across this 1px reticle or the 4 screen corners to verify zero black borders &amp; zero pixel shift.
         </p>
         <div id="svelte-bug-target" class="reticle-box" aria-label="DPR Calibration Reticle">
           <div class="reticle-cell">Q1 (TL)</div>
@@ -340,17 +340,17 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
     <section class="inspector-grid">
       <div class="card">
         <h2>
-          <span>📋 Latest Canonical Prompt &amp; Cropped PNGs</span>
+          <span>Latest Canonical Prompt &amp; Cropped PNGs</span>
           <span class="code-tag" id="latest-batch-id">Waiting for capture...</span>
         </h2>
         <div id="crop-verification-banner" style="display:none;padding:8px 12px;border-radius:6px;font-size:12px;font-weight:600;"></div>
         <div id="thumbs-container" class="thumbs"></div>
-        <pre id="prompt-preview">No batch captured yet. Press Option+Shift+A to annotate elements on this page, or click "⚡ Run DPR & Single-Capture Multi-Crop Self-Test".</pre>
+        <pre id="prompt-preview">No batch captured yet. Press Option+Shift+A to annotate elements on this page, or click "Run DPR & Single-Capture Multi-Crop Self-Test".</pre>
       </div>
 
       <div class="card">
         <h2>
-          <span>📊 Day-1 Anonymous Telemetry &amp; North Star</span>
+          <span>Day-1 Anonymous Telemetry &amp; North Star</span>
           <span class="code-tag">127.0.0.1:${port}</span>
         </h2>
         <div id="telemetry-panel">Loading telemetry stats...</div>
@@ -460,7 +460,7 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
           const { stats } = await statsRes.json();
           const panel = document.getElementById('telemetry-panel');
           const rows = [
-            ['🌟 North Star (7d Consumed)', stats.northStarMetric.value],
+            ['North Star (7d Consumed)', stats.northStarMetric.value],
             ['   ├─ Via MCP (get_latest_annotations)', stats.northStarMetric.breakdown.consumedViaMcp],
             ['   └─ Via Clipboard (pbcopy)', stats.northStarMetric.breakdown.consumedViaClipboard],
             ...Object.entries(stats.countsAllTime).map(([k, v]) => [\`Event: \${k}\`, v]),
@@ -656,7 +656,7 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
 
       await refreshInspector({
         ok: res.ok && zeroBlackBorders,
-        message: \`✅ Single-Capture Multi-Crop Verified (\${dpr}x DPR, 3 crops including bottom-right viewport edge): Zero black borders = \${zeroBlackBorders}, Saved \${data.imagePaths?.length || 0} PNGs & copied Canonical Prompt to clipboard!\`,
+        message: \`Single-Capture Multi-Crop Verified (\${dpr}x DPR, 3 crops including bottom-right viewport edge): Zero black borders = \${zeroBlackBorders}, Saved \${data.imagePaths?.length || 0} PNGs & copied Canonical Prompt to clipboard!\`,
       });
     }
 
@@ -665,7 +665,7 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
     window.addEventListener('__agent_annotator_batch_submitted__', () => {
       setTimeout(() => refreshInspector({
         ok: true,
-        message: '✅ Live Extension Capture received via activeTab + captureVisibleTab!',
+        message: 'Live Extension Capture received via activeTab + captureVisibleTab!',
       }), 150);
     });
 
