@@ -107,14 +107,32 @@
       position: absolute;
       top: -24px;
       left: -2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
       background: #128dff;
       color: #fff;
       font-size: 11px;
       font-weight: 600;
+      font-variant-numeric: tabular-nums;
       padding: 2px 6px;
       border-radius: 4px;
       white-space: nowrap;
       box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    }
+    .aa-icon {
+      width: 14px;
+      height: 14px;
+      flex: none;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .aa-hover-label .aa-icon {
+      width: 12px;
+      height: 12px;
     }
     /* Locked annotation outline (kept visible during screenshot capture!) */
     .aa-outline-box {
@@ -153,30 +171,96 @@
       transform: translateX(-50%);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       background: rgba(20, 22, 26, 0.94);
       backdrop-filter: blur(10px);
       color: #f3f4f6;
-      padding: 6px 12px;
+      padding: 5px 5px 5px 14px;
       border-radius: 999px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.12);
       pointer-events: auto;
       font-size: 12px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .aa-hints {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: #9ca3af;
+    }
+    .aa-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .aa-divider {
+      width: 1px;
+      height: 16px;
+      margin: 0 4px;
+      background: rgba(255, 255, 255, 0.14);
+    }
+    .aa-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding-right: 4px;
+      color: #9ca3af;
+    }
+    .aa-count b {
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      box-sizing: border-box;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #f9fafb;
+      font-size: 11px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
     .aa-btn {
       appearance: none;
       border: none;
       background: rgba(255, 255, 255, 0.1);
       color: #e5e7eb;
-      padding: 5px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 28px;
+      padding: 0 12px;
       border-radius: 999px;
+      font: inherit;
       font-size: 12px;
       font-weight: 500;
+      line-height: 1;
+      white-space: nowrap;
       cursor: pointer;
-      transition: background 120ms;
+      transition: background 120ms, opacity 120ms;
     }
     .aa-btn:hover {
       background: rgba(255, 255, 255, 0.18);
+    }
+    .aa-btn:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+    .aa-btn.icon-only {
+      width: 28px;
+      padding: 0;
+      justify-content: center;
+    }
+    .aa-kbd {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 10px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.12);
+      color: inherit;
+      opacity: 0.8;
     }
     .aa-btn.active {
       background: #128dff;
@@ -188,8 +272,12 @@
       color: #ffffff;
       font-weight: 600;
     }
-    .aa-btn.primary:hover {
+    .aa-btn.primary:hover:not(:disabled) {
       background: #059669;
+    }
+    .aa-btn.primary:disabled {
+      background: rgba(255, 255, 255, 0.1);
+      color: #9ca3af;
     }
     /* Comment input card (hidden during screenshot capture) */
     .aa-card {
@@ -230,6 +318,7 @@
       border: 1px solid rgba(255, 255, 255, 0.14);
       border-radius: 6px;
       padding: 7px 8px;
+      font: inherit;
       font-size: 12px;
       line-height: 1.4;
       resize: vertical;
@@ -249,6 +338,9 @@
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
       background: #111827;
       color: #fff;
       padding: 8px 16px;
@@ -258,7 +350,52 @@
       box-shadow: 0 8px 24px rgba(0,0,0,0.3);
       pointer-events: none;
     }
+    .aa-toast .aa-icon {
+      color: #34d399;
+      width: 16px;
+      height: 16px;
+    }
   `;
+
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  /** Monochrome 24x24 stroke icons; each entry is a list of [tagName, attributes]. */
+  const ICONS = {
+    pointer: [['path', { d: 'M5 3l14 7.5-6.2 1.7L10 18.5z' }]],
+    region: [['rect', { x: 4, y: 4, width: 16, height: 16, rx: 2, 'stroke-dasharray': '3 3' }]],
+    copy: [
+      ['rect', { x: 9, y: 9, width: 11, height: 11, rx: 2 }],
+      ['path', { d: 'M5 15V6a2 2 0 0 1 2-2h8' }],
+    ],
+    image: [
+      ['rect', { x: 3, y: 4, width: 18, height: 16, rx: 2 }],
+      ['circle', { cx: 9, cy: 10, r: 1.5 }],
+      ['path', { d: 'M21 16l-5-5-9 9' }],
+    ],
+    close: [['path', { d: 'M6 6l12 12M18 6L6 18' }]],
+    check: [['path', { d: 'M5 12.5l4.5 4.5L19 7' }]],
+  };
+
+  /**
+   * Build an inline SVG icon that inherits the surrounding text color.
+   * @param {keyof typeof ICONS} name
+   */
+  function icon(name) {
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('class', 'aa-icon');
+    svg.setAttribute('aria-hidden', 'true');
+    for (const [tag, attrs] of ICONS[name]) {
+      const node = document.createElementNS(SVG_NS, tag);
+      for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, String(v));
+      svg.appendChild(node);
+    }
+    return svg;
+  }
+
+  /** Fill an element with an icon followed by a text label. */
+  function setIconLabel(el, name, label) {
+    el.replaceChildren(icon(name), document.createTextNode(label));
+  }
 
   const markersLayer = document.createElement('div');
   markersLayer.className = 'aa-layer';
@@ -533,23 +670,29 @@
     const toolbar = document.createElement('div');
     toolbar.className = 'aa-toolbar';
 
-    const hintSpan = document.createElement('span');
-    hintSpan.textContent = '🎯 Click element · 📐 Drag region';
-    hintSpan.style.color = '#9ca3af';
-    hintSpan.style.padding = '0 6px 0 4px';
-    hintSpan.style.borderRight = '1px solid rgba(255, 255, 255, 0.14)';
+    const hints = document.createElement('span');
+    hints.className = 'aa-hints';
+    const clickHint = document.createElement('span');
+    clickHint.className = 'aa-hint';
+    setIconLabel(clickHint, 'pointer', 'Click element');
+    const dragHint = document.createElement('span');
+    dragHint.className = 'aa-hint';
+    setIconLabel(dragHint, 'region', 'Drag region');
+    hints.append(clickHint, dragHint);
+
+    const divider = document.createElement('span');
+    divider.className = 'aa-divider';
 
     const countSpan = document.createElement('span');
-    countSpan.textContent = `${annotations.length} marked`;
-    countSpan.style.padding = '0 4px';
-    countSpan.style.fontWeight = '600';
+    countSpan.className = 'aa-count';
+    const countNum = document.createElement('b');
+    countNum.textContent = String(annotations.length);
+    countSpan.append(countNum, document.createTextNode('marked'));
 
     const finishBtn = document.createElement('button');
     finishBtn.className = 'aa-btn primary';
-    finishBtn.textContent =
-      annotations.length > 0 ? `✓ Copy Prompt (${annotations.length})` : '✓ Copy Prompt';
+    setIconLabel(finishBtn, 'copy', 'Copy Prompt');
     finishBtn.disabled = annotations.length === 0;
-    finishBtn.style.opacity = annotations.length === 0 ? '0.5' : '1';
     finishBtn.onclick = (e) => {
       e.stopPropagation();
       finishAndSubmitBatch('prompt');
@@ -557,23 +700,24 @@
 
     const copyImgBtn = document.createElement('button');
     copyImgBtn.className = 'aa-btn';
-    copyImgBtn.textContent = '🖼️ Copy PNG';
+    setIconLabel(copyImgBtn, 'image', 'Copy PNG');
     copyImgBtn.disabled = annotations.length === 0;
-    copyImgBtn.style.opacity = annotations.length === 0 ? '0.5' : '1';
     copyImgBtn.onclick = (e) => {
       e.stopPropagation();
       finishAndSubmitBatch('image');
     };
 
     const closeBtn = document.createElement('button');
-    closeBtn.className = 'aa-btn';
-    closeBtn.textContent = '✕ Esc';
+    closeBtn.className = 'aa-btn icon-only';
+    closeBtn.title = 'Exit (Esc)';
+    closeBtn.setAttribute('aria-label', 'Exit annotator (Esc)');
+    closeBtn.replaceChildren(icon('close'));
     closeBtn.onclick = (e) => {
       e.stopPropagation();
       cleanupAndExit();
     };
 
-    toolbar.append(hintSpan, countSpan, finishBtn, copyImgBtn, closeBtn);
+    toolbar.append(hints, divider, countSpan, finishBtn, copyImgBtn, closeBtn);
     uiChromeLayer.appendChild(toolbar);
 
     // Active comment editor card
@@ -657,7 +801,10 @@
 
       const doneBtn = document.createElement('button');
       doneBtn.className = 'aa-btn active';
-      doneBtn.textContent = 'Save Marker (Enter)';
+      const enterKbd = document.createElement('span');
+      enterKbd.className = 'aa-kbd';
+      enterKbd.textContent = 'Enter';
+      doneBtn.append('Save', enterKbd);
       doneBtn.onclick = (ev) => {
         ev.stopPropagation();
         editingIndex = null;
@@ -957,7 +1104,7 @@
     hoverBox.style.display = 'none';
     const toast = document.createElement('div');
     toast.className = 'aa-toast';
-    toast.textContent = `✅ ${message}`;
+    setIconLabel(toast, 'check', message);
     shadow.appendChild(toast);
     setTimeout(() => {
       cleanupAndExit();
@@ -1018,7 +1165,7 @@
           width: `${w}px`,
           height: `${h}px`,
         });
-        hoverLabel.textContent = `📐 ${Math.round(w)} × ${Math.round(h)}`;
+        setIconLabel(hoverLabel, 'region', `${Math.round(w)} × ${Math.round(h)}`);
         return;
       }
     }
