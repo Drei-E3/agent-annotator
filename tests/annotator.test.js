@@ -262,14 +262,16 @@ test('6. Single-Capture Multi-Crop geometry strictly clamps edge/corner targets 
   }
 });
 
-test('7. Local Hub serves W1 Verification Playground HTML and saved PNG capture previews', async () => {
+test('7. Local Hub serves the internal test page HTML and saved PNG capture previews', async () => {
   const hub = await startCollectorServer({ port: 0, autoClipboard: false });
   try {
     const pgRes = await fetch(`http://${hub.host}:${hub.port}/playground`);
     assert.equal(pgRes.status, 200);
     const html = await pgRes.text();
-    assert.ok(html.includes('W1 Real-Browser Verification Playground'));
+    assert.ok(html.includes('Internal test page'));
     assert.ok(html.includes('__reactFiber$w1_verify'));
+    // Fixtures must not read like a real product, price or purchase.
+    assert.doesNotMatch(html, /complete purchase|checkout|buy now|add to cart|[$€£¥]\s?\d|\bpro plan\b|\d\s?% off\b/i);
 
     const imgRes = await fetch(
       `http://${hub.host}:${hub.port}/api/captures/batch_e2e_hub_1/annotation-1.png`

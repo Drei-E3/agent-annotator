@@ -1,6 +1,7 @@
 /**
- * @fileoverview Built-in W1 Interactive Playground & Verification Harness served at
- * `http://127.0.0.1:17380/` and `http://127.0.0.1:17380/playground`.
+ * @fileoverview Built-in internal test page (W1 playground & verification harness) served at
+ * `http://127.0.0.1:17380/` and `http://127.0.0.1:17380/playground`. Every element on it is a
+ * fake, self-describing fixture; keep it free of anything that reads like a real product or price.
  *
  * Designed to verify all W1 exit criteria across Chrome, Arc, and Edge:
  *  1. `activeTab` + `Alt+Shift+A` on-demand gesture injection.
@@ -16,7 +17,7 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Agent Annotator v0.1 — W1 Verification Playground</title>
+  <title>Agent Annotator — Internal Test Page</title>
   <style>
     :root {
       --bg: #0b0d12;
@@ -163,7 +164,7 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
       flex-direction: column;
       gap: 10px;
     }
-    .buggy-checkout-btn {
+    .sample-overflow-btn {
       display: inline-flex;
       align-items: center;
       justify-content: space-between;
@@ -175,10 +176,10 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
       border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
-      /* Intentional UI bug: overflowing icon alignment */
+      /* Intentional UI bug: label overflows the fixed-width button */
       white-space: nowrap;
     }
-    .buggy-badge {
+    .sample-low-contrast-badge {
       display: inline-block;
       background: #fef08a;
       color: #eab308; /* Intentional low-contrast UI bug */
@@ -274,10 +275,13 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
       <div>
         <h1>
           Universal Agent Annotator
-          <span class="badge">W1 Real-Browser Verification Playground</span>
+          <span class="badge">Internal test page</span>
         </h1>
         <p>
           Press <strong>Option+Shift+A</strong> (macOS) / <strong>Alt+Shift+A</strong> or click the extension icon to test <code>activeTab</code> on-demand injection, or run the built-in DPR &amp; Multi-Crop verification suite below.
+        </p>
+        <p style="margin-top:6px;">
+          The button, badge, grid and corner tabs are fake fixtures for testing annotation, component detection and cropping; nothing here is a real product, price or purchase. The inspector below shows real captures from this hub, and the self-test saves a batch like any annotation.
         </p>
       </div>
       <div class="btn-row">
@@ -291,15 +295,15 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
       <div class="card">
         <h2>
           <span>1. React 18/19 Fiber Target</span>
-          <span class="code-tag">CheckoutCard.tsx:142</span>
+          <span class="code-tag">SampleButton.tsx:142</span>
         </h2>
         <p style="margin:0;font-size:12px;color:var(--muted);">
-          Attached with <code>__reactFiber$w1</code> + <code>_debugSource</code>. Clicking this with the annotator places <code>Source location: src/components/CheckoutCard.tsx:142</code> at the top of the prompt.
+          Fake button whose label overflows on purpose, attached with <code>__reactFiber$w1</code> + <code>_debugSource</code>. Clicking this with the annotator places <code>Source location: src/components/SampleButton.tsx:142</code> at the top of the prompt.
         </p>
         <div class="mock-ui-box">
-          <button id="react-bug-target" class="buggy-checkout-btn" aria-label="Complete Purchase Button">
-            <span>Complete Purchase</span>
-            <span style="margin-left:18px;">→ $129.00</span>
+          <button id="react-bug-target" class="sample-overflow-btn" aria-label="Sample button with overflowing label">
+            <span>Sample button</span>
+            <span style="margin-left:18px;">→ text overflows</span>
           </button>
         </div>
       </div>
@@ -307,14 +311,14 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
       <div class="card">
         <h2>
           <span>2. Vue 3 Component Target</span>
-          <span class="code-tag">PricingTierBadge.vue</span>
+          <span class="code-tag">SampleBadge.vue</span>
         </h2>
         <p style="margin:0;font-size:12px;color:var(--muted);">
-          Attached with <code>__vueParentComponent</code> metadata. Extracts <code>&lt;PricingTierBadge&gt; (vue)</code> and file path automatically.
+          Fake badge with deliberately low text contrast, attached with <code>__vueParentComponent</code> metadata. Extracts <code>&lt;SampleBadge&gt; (vue)</code> and file path automatically.
         </p>
         <div class="mock-ui-box">
-          <span id="vue-bug-target" class="buggy-badge" role="status">
-            PRO PLAN — 20% OFF (Low Contrast Bug)
+          <span id="vue-bug-target" class="sample-low-contrast-badge" role="status">
+            Sample badge — low contrast on purpose
           </span>
         </div>
       </div>
@@ -364,16 +368,16 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
       const reactBtn = document.getElementById('react-bug-target');
       if (reactBtn) {
         const reactFiber = {
-          type: { displayName: 'CheckoutCard', name: 'CheckoutCard' },
+          type: { displayName: 'SampleButton', name: 'SampleButton' },
           _debugSource: {
-            fileName: 'src/components/CheckoutCard.tsx',
+            fileName: 'src/components/SampleButton.tsx',
             lineNumber: 142,
             columnNumber: 9,
           },
           return: {
-            type: { name: 'PaymentSection' },
+            type: { name: 'SampleForm' },
             return: {
-              type: { name: 'CheckoutPage' },
+              type: { name: 'SamplePage' },
               return: null,
             },
           },
@@ -387,11 +391,11 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
       if (vueBadge) {
         const vueInstance = {
           type: {
-            __name: 'PricingTierBadge',
-            __file: 'src/components/PricingTierBadge.vue',
+            __name: 'SampleBadge',
+            __file: 'src/components/SampleBadge.vue',
           },
           parent: {
-            type: { __name: 'PricingHeader' },
+            type: { __name: 'SampleHeader' },
             parent: null,
           },
         };
@@ -510,14 +514,14 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
         {
           el: document.getElementById('react-bug-target'),
           kind: 'element',
-          comment: 'Fix button price text spacing and alignment',
+          comment: 'Fix the button label overflow and alignment',
           comp: {
             framework: 'react',
-            componentName: 'CheckoutCard',
-            filePath: 'src/components/CheckoutCard.tsx',
+            componentName: 'SampleButton',
+            filePath: 'src/components/SampleButton.tsx',
             lineNumber: 142,
             columnNumber: 9,
-            componentStack: ['CheckoutPage', 'PaymentSection', 'CheckoutCard'],
+            componentStack: ['SamplePage', 'SampleForm', 'SampleButton'],
           },
         },
         {
@@ -526,9 +530,9 @@ export function renderPlaygroundHtml({ port = 17380 } = {}) {
           comment: 'Increase badge text contrast to pass WCAG AA',
           comp: {
             framework: 'vue',
-            componentName: 'PricingTierBadge',
-            filePath: 'src/components/PricingTierBadge.vue',
-            componentStack: ['PricingHeader', 'PricingTierBadge'],
+            componentName: 'SampleBadge',
+            filePath: 'src/components/SampleBadge.vue',
+            componentStack: ['SampleHeader', 'SampleBadge'],
           },
         },
         {
