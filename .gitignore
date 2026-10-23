@@ -19,3 +19,8 @@ Thumbs.db
 *.log
 .env
 .env.*
+
+# Agent worktrees and working files
+.worktrees/
+.claude/worktrees/
+.agents/teamwork/
