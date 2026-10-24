@@ -284,8 +284,10 @@ test('7. Local Hub serves the internal test page HTML and saved PNG capture prev
 });
 
 import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
 import { computeSafeCropGeometry } from '../packages/shared/src/crop-geometry.js';
 import { saveBatchToDisk, pruneCaptures, getCapturesDir } from '../packages/collector-hub/src/storage.js';
+import { copyTextToClipboard } from '../packages/collector-hub/src/clipboard.js';
 
 test('8. Storage GC automatically prunes expired and overflow capture directories on disk', () => {
   for (let i = 1; i <= 4; i++) {
@@ -351,4 +353,61 @@ test('9. Security regressions: origin/host/content-type, forged localPath, newli
   fs.writeFileSync(path.join(capDir, 'index.json'), '{not json');
   pruneCaptures({ maxBatches: 1 });
   assert.equal(fs.existsSync(path.join(capDir, 'batch_keepme_1')), true);
+});
+
+test('10. copyTextToClipboard preserves non-ASCII UTF-8 text even without LANG/LC_CTYPE in process.env', () => {
+  if (process.platform !== 'darwin') return;
+  const utf8LocaleEnv = { ...process.env, LANG: 'en_US.UTF-8', LC_CTYPE: 'UTF-8' };
+  const savedClipboard = spawnSync('pbpaste', [], { encoding: 'utf8', env: utf8LocaleEnv });
+  const prevLang = process.env.LANG;
+  const prevLcCtype = process.env.LC_CTYPE;
+  const prevLcAll = process.env.LC_ALL;
+  delete process.env.LANG;
+  delete process.env.LC_CTYPE;
+  delete process.env.LC_ALL;
+  try {
+    const sample = '这部分感觉没效果 · 准备中… 0/0';
+    const copyRes = copyTextToClipboard(sample);
+    assert.equal(copyRes.ok, true);
+    const pasted = spawnSync('pbpaste', [], { encoding: 'utf8', env: utf8LocaleEnv });
+    assert.equal(pasted.status, 0);
+    assert.equal(pasted.stdout, sample);
+  } finally {
+    if (prevLang !== undefined) process.env.LANG = prevLang;
+    if (prevLcCtype !== undefined) process.env.LC_CTYPE = prevLcCtype;
+    if (prevLcAll !== undefined) process.env.LC_ALL = prevLcAll;
+    if (savedClipboard.status === 0) {
+      spawnSync('pbcopy', [], {
+        input: savedClipboard.stdout,
+        encoding: 'utf8',
+        env: utf8LocaleEnv,
+      });
+    }
+  }
+});
+
+test('11. copyTextToClipboard preserves non-ASCII UTF-8 text when LC_ALL is set to a non-UTF-8 locale', () => {
+  if (process.platform !== 'darwin') return;
+  const utf8LocaleEnv = { ...process.env, LANG: 'en_US.UTF-8', LC_CTYPE: 'UTF-8', LC_ALL: 'en_US.UTF-8' };
+  const savedClipboard = spawnSync('pbpaste', [], { encoding: 'utf8', env: utf8LocaleEnv });
+  const prevLcAll = process.env.LC_ALL;
+  process.env.LC_ALL = 'C';
+  try {
+    const sample = '这部分感觉没效果 · 准备中… 0/0';
+    const copyRes = copyTextToClipboard(sample);
+    assert.equal(copyRes.ok, true);
+    const pasted = spawnSync('pbpaste', [], { encoding: 'utf8', env: utf8LocaleEnv });
+    assert.equal(pasted.status, 0);
+    assert.equal(pasted.stdout, sample);
+  } finally {
+    if (prevLcAll !== undefined) process.env.LC_ALL = prevLcAll;
+    else delete process.env.LC_ALL;
+    if (savedClipboard.status === 0) {
+      spawnSync('pbcopy', [], {
+        input: savedClipboard.stdout,
+        encoding: 'utf8',
+        env: utf8LocaleEnv,
+      });
+    }
+  }
 });
