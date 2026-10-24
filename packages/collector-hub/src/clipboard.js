@@ -15,7 +15,7 @@ export function copyTextToClipboard(text) {
     const res = spawnSync('pbcopy', [], {
       input: text,
       encoding: 'utf8',
-      env: { ...process.env, LANG: 'en_US.UTF-8', LC_CTYPE: 'UTF-8' },
+      env: { ...process.env, LANG: 'en_US.UTF-8', LC_CTYPE: 'UTF-8', LC_ALL: 'en_US.UTF-8' },
     });
     if (res.status === 0) {
       return { ok: true };

@@ -385,3 +385,29 @@ test('10. copyTextToClipboard preserves non-ASCII UTF-8 text even without LANG/L
     }
   }
 });
+
+test('11. copyTextToClipboard preserves non-ASCII UTF-8 text when LC_ALL is set to a non-UTF-8 locale', () => {
+  if (process.platform !== 'darwin') return;
+  const utf8LocaleEnv = { ...process.env, LANG: 'en_US.UTF-8', LC_CTYPE: 'UTF-8', LC_ALL: 'en_US.UTF-8' };
+  const savedClipboard = spawnSync('pbpaste', [], { encoding: 'utf8', env: utf8LocaleEnv });
+  const prevLcAll = process.env.LC_ALL;
+  process.env.LC_ALL = 'C';
+  try {
+    const sample = '这部分感觉没效果 · 准备中… 0/0';
+    const copyRes = copyTextToClipboard(sample);
+    assert.equal(copyRes.ok, true);
+    const pasted = spawnSync('pbpaste', [], { encoding: 'utf8', env: utf8LocaleEnv });
+    assert.equal(pasted.status, 0);
+    assert.equal(pasted.stdout, sample);
+  } finally {
+    if (prevLcAll !== undefined) process.env.LC_ALL = prevLcAll;
+    else delete process.env.LC_ALL;
+    if (savedClipboard.status === 0) {
+      spawnSync('pbcopy', [], {
+        input: savedClipboard.stdout,
+        encoding: 'utf8',
+        env: utf8LocaleEnv,
+      });
+    }
+  }
+});
